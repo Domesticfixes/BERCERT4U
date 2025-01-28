@@ -105,43 +105,53 @@ app.post("/send-signup-emails", async (req, res) => {
   const { userEmail, userType, userDetails } = req.body;
 
   try {
+    // Email Subject
     const subject =
       userType === "customer"
         ? "Welcome to BERCERT4U – Your Account is Ready 🎉"
         : "BERCERT4U Assessor Account Created – Welcome Aboard ✅";
-    const text =
+
+    // Email HTML Content
+    const html =
       userType === "customer"
-        ? `Dear ${userDetails.name},\n\nThank you for signing up with BERCERT4U! Your account has been successfully created, and you can now book a BER assessment with certified professionals.\n\n 
-🔹 What’s Next?
-✅ Log in to your account: <a href="https://bercert4u.ie/customer_login.html" target="_blank">Customer Login</a>
-✅ Book a BER Assessment: <a href="https://bercert4u.ie/customer_form.html" target="_blank"> Customer Form</a>
-✅ Need Help? Contact us at domesticfixesie@gmail.com
-
-We’re here to help you make your home energy-efficient! 🚀
-
-Best regards,
-BERCERT4U Team
-https://bercert4u.ie`
-        : `Dear ${userDetails.name},\n\nWelcome to BERCERT4U! Your account has been successfully created, and you can now start receiving assessment requests from customers.
-🔹 Next Steps:
-✔️ Log in to your Assessor Portal: Assessor Login
-✔️ Update Your Profile & Availability
-✔️ Connect with Customers & Schedule Assessments
-
-For any assistance,feel free to reach out to us at domesticfixesie@gmail.com.
-
-We’re excited to have you on board! 🚀
-
-Best regards,
-BERCERT4U Team
-https://bercert4u.ie`;
+        ? `<!DOCTYPE html>
+           <html>
+             <body style="font-family: Arial, sans-serif; line-height: 1.6; color: #333;">
+               <p>Dear ${userDetails.name},</p>
+               <p>Thank you for signing up with <strong>BERCERT4U</strong>! Your account has been successfully created, and you can now book a BER assessment with certified professionals.</p>
+               <p><strong>What’s Next?</strong></p>
+               <ul>
+                 <li>✅ <a href="https://bercert4u.ie/customer_login.html" target="_blank">Log in to your account</a></li>
+                 <li>✅ <a href="https://bercert4u.ie/customer_form.html" target="_blank">Book a BER Assessment</a></li>
+                 <li>✅ Need Help? Contact us at <a href="mailto:domesticfixesie@gmail.com">domesticfixesie@gmail.com</a></li>
+               </ul>
+               <p>We’re here to help you make your home energy-efficient! 🚀</p>
+               <p>Best regards,<br><strong>BERCERT4U Team</strong><br><a href="https://bercert4u.ie" target="_blank">https://bercert4u.ie</a></p>
+             </body>
+           </html>`
+        : `<!DOCTYPE html>
+           <html>
+             <body style="font-family: Arial, sans-serif; line-height: 1.6; color: #333;">
+               <p>Dear ${userDetails.name},</p>
+               <p>Welcome to <strong>BERCERT4U</strong>! Your account has been successfully created, and you can now start receiving assessment requests from customers.</p>
+               <p><strong>Next Steps:</strong></p>
+               <ul>
+                 <li>✔️ <a href="https://bercert4u.ie/ber_login.html" target="_blank">Log in to your Assessor Portal</a></li>
+                 <li>✔️ Provide quotes for customer requests</li>
+                 <li>✔️ Connect with Customers & Schedule Assessments</li>
+               </ul>
+               <p>For any assistance, feel free to reach out to us at <a href="mailto:domesticfixesie@gmail.com">domesticfixesie@gmail.com</a>.</p>
+               <p>We’re excited to have you on board! 🚀</p>
+               <p>Best regards,<br><strong>BERCERT4U Team</strong><br><a href="https://bercert4u.ie" target="_blank">https://bercert4u.ie</a></p>
+             </body>
+           </html>`;
 
     // Send email
     await transporter.sendMail({
       from: process.env.EMAIL_USER,
       to: userEmail,
       subject: subject,
-      text: text,
+      html: html, // Use HTML content
     });
 
     res.status(200).json({ message: "Signup email sent successfully!" });
@@ -150,6 +160,7 @@ https://bercert4u.ie`;
     res.status(500).json({ error: "Failed to send signup email." });
   }
 });
+
 
 // Start the server
 const PORT = 3000;
