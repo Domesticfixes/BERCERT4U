@@ -128,7 +128,7 @@ https://bercert4u.ie`;
 ✔️ Update Your Profile & Availability
 ✔️ Connect with Customers & Schedule Assessments
 
-For any assistance, feel free to reach out to us at domesticfixesie@gmail.com.
+For any assistance,feel free to reach out to us at domesticfixesie@gmail.com.
 
 We’re excited to have you on board! 🚀
 
