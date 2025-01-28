@@ -121,7 +121,7 @@ We’re here to help you make your home energy-efficient! 🚀
 
 Best regards,
 BERCERT4U Team
-https://bercert4u.ie`;
+https://bercert4u.ie`
         : `Dear ${userDetails.name},\n\nWelcome to BERCERT4U! Your account has been successfully created, and you can now start receiving assessment requests from customers.
 🔹 Next Steps:
 ✔️ Log in to your Assessor Portal: Assessor Login
