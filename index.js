@@ -107,12 +107,34 @@ app.post("/send-signup-emails", async (req, res) => {
   try {
     const subject =
       userType === "customer"
-        ? "Welcome to BERCERT4U!"
-        : "Welcome to BERCERT4U as a Handyman!";
+        ? "Welcome to BERCERT4U – Your Account is Ready 🎉"
+        : "BERCERT4U Assessor Account Created – Welcome Aboard ✅";
     const text =
       userType === "customer"
-        ? `Dear ${userDetails.name},\n\nThank you for signing up with BERCERT4U! We are delighted to have you on board. You can now book trusted BER Assessors to handle all your certification needs.\n\nWarm regards,  \nThe BERCERT4U Team`
-        : `Dear ${userDetails.name},\n\nWelcome to BERCERT4U! We are excited to have you as part of our team of skilled professionals. Please ensure your profile is up-to-date to start receiving service requests.\n\nWarm regards,  \nThe BERCERT4U Team`;
+        ? `Dear ${userDetails.name},\n\nThank you for signing up with BERCERT4U! Your account has been successfully created, and you can now book a BER assessment with certified professionals.\n\n 
+🔹 What’s Next?
+✅ Log in to your account: <a href="https://bercert4u.ie/customer_login.html" target="_blank">Customer Login</a>
+✅ Book a BER Assessment: <a href="https://bercert4u.ie/customer_form.html" target="_blank"> Customer Form</a>
+✅ Need Help? Contact us at domesticfixesie@gmail.com
+
+We’re here to help you make your home energy-efficient! 🚀
+
+Best regards,
+BERCERT4U Team
+https://bercert4u.ie`;
+        : `Dear ${userDetails.name},\n\nWelcome to BERCERT4U! Your account has been successfully created, and you can now start receiving assessment requests from customers.
+🔹 Next Steps:
+✔️ Log in to your Assessor Portal: Assessor Login
+✔️ Update Your Profile & Availability
+✔️ Connect with Customers & Schedule Assessments
+
+For any assistance, feel free to reach out to us at domesticfixesie@gmail.com.
+
+We’re excited to have you on board! 🚀
+
+Best regards,
+BERCERT4U Team
+https://bercert4u.ie`;
 
     // Send email
     await transporter.sendMail({
