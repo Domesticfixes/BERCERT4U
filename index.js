@@ -165,7 +165,17 @@ app.post("/send-signup-emails", async (req, res) => {
 app.post("/send-new-quote-email", async (req, res) => {
   const { customerEmail, customerDetails, handymanDetails, quoteAmount } = req.body;
 
+  if (!customerEmail || !customerDetails || !handymanDetails || !quoteAmount) {
+    return res.status(400).json({ error: "Missing required fields in the request body." });
+  }
+
   try {
+    // Log details for debugging
+    console.log("Customer Email:", customerEmail);
+    console.log("Customer Details:", customerDetails);
+    console.log("Handyman Details:", handymanDetails);
+    console.log("Quote Amount:", quoteAmount);
+
     // Email to the customer
     await transporter.sendMail({
       from: process.env.EMAIL_USER,
@@ -181,7 +191,6 @@ app.post("/send-new-quote-email", async (req, res) => {
             <ul>
               <li><strong>Assessor Name:</strong> ${handymanDetails.name}</li>
               <li><strong>Quote Amount:</strong> €${quoteAmount}</li>
-            
             </ul>
             <p>To review the details and accept the quote:</p>
             <p><a href="https://bercert4u.ie/customer_login.html" target="_blank" style="color: #007BFF;">Click Here to View and Confirm the Quote</a></p>
@@ -195,12 +204,10 @@ app.post("/send-new-quote-email", async (req, res) => {
 
     res.status(200).json({ message: "New quote email sent successfully!" });
   } catch (error) {
-    console.error("Error sending new quote email:", error);
+    console.error("Error sending new quote email:", error.message);
     res.status(500).json({ error: "Failed to send new quote email." });
   }
 });
-
-
 
 // Start the server
 const PORT = 3000;
