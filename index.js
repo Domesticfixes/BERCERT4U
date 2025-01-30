@@ -161,6 +161,46 @@ app.post("/send-signup-emails", async (req, res) => {
   }
 });
 
+// API to send "New Quote Available" email
+app.post("/send-new-quote-email", async (req, res) => {
+  const { customerEmail, customerDetails, handymanDetails, quoteAmount } = req.body;
+
+  try {
+    // Email to the customer
+    await transporter.sendMail({
+      from: process.env.EMAIL_USER,
+      to: customerEmail,
+      subject: "A New Quote is Available for Your BER Certification",
+      html: `
+        <!DOCTYPE html>
+        <html>
+          <body style="font-family: Arial, sans-serif; line-height: 1.6; color: #333;">
+            <p>Dear ${customerDetails.name},</p>
+            <p>We’re pleased to inform you that a BER assessor has provided a quote for your certification request.</p>
+            <p><strong>Quote Details:</strong></p>
+            <ul>
+              <li><strong>Assessor Name:</strong> ${handymanDetails.name}</li>
+              <li><strong>Quote Amount:</strong> €${quoteAmount}</li>
+            
+            </ul>
+            <p>To review the details and accept the quote:</p>
+            <p><a href="https://bercert4u.ie/customer_login.html" target="_blank" style="color: #007BFF;">Click Here to View and Confirm the Quote</a></p>
+            <p>If you have any questions or need assistance, please don’t hesitate to contact us at <a href="mailto:domesticfixesie@gmail.com">domesticfixesie@gmail.com</a>.</p>
+            <p>Thank you for choosing <strong>BERCERT4U</strong> to support your home energy efficiency journey!</p>
+            <p>Best regards,<br><strong>The BERCERT4U Team</strong><br><a href="https://bercert4u.ie" target="_blank">https://bercert4u.ie</a></p>
+          </body>
+        </html>
+      `,
+    });
+
+    res.status(200).json({ message: "New quote email sent successfully!" });
+  } catch (error) {
+    console.error("Error sending new quote email:", error);
+    res.status(500).json({ error: "Failed to send new quote email." });
+  }
+});
+
+
 
 // Start the server
 const PORT = 3000;
