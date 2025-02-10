@@ -99,6 +99,61 @@ The BERCERT4U Team`,
   }
 });
 
+// API to send request submission email
+app.post("/send-request-email", async (req, res) => {
+  const { customerEmail, customerDetails, requestDetails, isSignedUp } = req.body;
+
+  if (!customerEmail || !customerDetails || !requestDetails) {
+    return res.status(400).json({ error: "Missing required fields in the request body." });
+  }
+
+  try {
+    // Email content
+    const subject = "Thank You for Submitting Your Request - BERCERT4U";
+    const html = `
+      <!DOCTYPE html>
+      <html>
+        <body style="font-family: Arial, sans-serif; line-height: 1.6; color: #333;">
+          <p>Dear ${customerDetails.name},</p>
+          <p>Thank you for submitting your BER certificate request with <strong>BERCERT4U</strong>!</p>
+          <p><strong>Request Details:</strong></p>
+          <ul>
+            <li><strong>Property Type:</strong> ${requestDetails.propertyType}</li>
+            <li><strong>Property Size:</strong> ${requestDetails.propertySize} sq.ft</li>
+            <li><strong>Bedrooms:</strong> ${requestDetails.bedrooms}</li>
+            <li><strong>Preferred Date:</strong> ${requestDetails.preferredDate}</li>
+            <li><strong>County:</strong> ${requestDetails.county}</li>
+          </ul>
+          <p>Our certified BER assessors will review your request and provide quotes shortly.</p>
+          
+          ${
+            isSignedUp
+              ? `<p>You can log in to your account to view and accept quotes: <a href="https://bercert4u.ie/customer_login.html" target="_blank" style="color: #007BFF;">Log In</a></p>`
+              : `<p><strong>Not signed up yet?</strong> You can't view your profile or see quotes unless you sign up! <a href="https://bercert4u.ie/customer_signup.html" target="_blank" style="color: #007BFF;">Sign Up Now</a> to access all features.</p>`
+          }
+          
+          <p>If you have any questions, feel free to contact us at <a href="mailto:domesticfixesie@gmail.com">domesticfixesie@gmail.com</a>.</p>
+          <p>Thank you for choosing <strong>BERCERT4U</strong> to make your home energy efficient!</p>
+          <p>Best regards,<br><strong>BERCERT4U Team</strong><br><a href="https://bercert4u.ie" target="_blank">https://bercert4u.ie</a></p>
+        </body>
+      </html>
+    `;
+
+    // Send email
+    await transporter.sendMail({
+      from: process.env.EMAIL_USER,
+      to: customerEmail,
+      subject: subject,
+      html: html,
+    });
+
+    res.status(200).json({ message: "Request submission email sent successfully!" });
+  } catch (error) {
+    console.error("Error sending request submission email:", error.message);
+    res.status(500).json({ error: "Failed to send request submission email." });
+  }
+});
+
 
 // API to send signup emails
 app.post("/send-signup-emails", async (req, res) => {
