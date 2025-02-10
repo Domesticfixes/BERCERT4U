@@ -101,14 +101,24 @@ The BERCERT4U Team`,
 
 // API to send request submission email
 app.post("/send-request-email", async (req, res) => {
-  const { customerEmail, customerDetails, requestDetails, isSignedUp } = req.body;
+  const { customerEmail, customerDetails, requestDetails, isSignedUp = false } = req.body;
 
-  if (!customerEmail || !customerDetails || !requestDetails) {
-    return res.status(400).json({ error: "Missing required fields in the request body." });
+  // Validate inputs
+  if (
+    typeof customerEmail !== "string" ||
+    typeof customerDetails !== "object" ||
+    typeof requestDetails !== "object" ||
+    !customerEmail.includes("@") ||
+    !customerDetails.name ||
+    !requestDetails.propertyType ||
+    !requestDetails.preferredDate
+  ) {
+    return res.status(400).json({ error: "Invalid or missing required fields." });
   }
 
+  console.log("Received request:", req.body);
+
   try {
-    // Email content
     const subject = "Thank You for Submitting Your Request - BERCERT4U";
     const html = `
       <!DOCTYPE html>
